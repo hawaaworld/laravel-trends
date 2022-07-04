@@ -23,9 +23,11 @@ class Trends
     public function top(int $limit = 10, string $model = null): Collection
     {
         return Energy::query()
+            ->with('energiser')
             ->when($model, fn (Builder $query) => $query->where('energiser_type', $model))
             ->latest('amount')
             ->take($limit)
-            ->get();
+            ->get()
+            ->pluck('energiser');
     }
 }

@@ -9,7 +9,7 @@ class Energy extends Model
 {
     protected $fillable = ['amount'];
 
-    public function subject(): MorphTo
+    public function energiser(): MorphTo
     {
         return $this->morphTo();
     }
