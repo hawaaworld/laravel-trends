@@ -33,7 +33,7 @@ class AddEnergy implements ShouldQueue
             return;
         }
 
-        $sequence = config('trends.loss_sequence');
+        $sequence = config('trends.loss_sequence', [1]);
 
         LossEnergy::dispatch($energy, $this->amount, $sequence)->delay(
             now()->addMinutes(config('trends.loss_time'))
