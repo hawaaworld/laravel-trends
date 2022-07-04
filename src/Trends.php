@@ -25,7 +25,7 @@ class Trends
             ->with(['energiser' => $builder])
             ->when($model, fn (Builder $query) => $query->where('energiser_type', $model))
             ->latest('amount')
-            ->take($limit)
+            ->limit($limit)
             ->get()
             ->pluck('energiser')
             ->filter();
