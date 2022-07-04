@@ -8,6 +8,6 @@ class Trends extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return 'Trends';
+        return 'trends';
     }
 }
