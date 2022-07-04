@@ -13,6 +13,13 @@ class LossEnergy implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * Delete the job if its models no longer exist.
+     *
+     * @var bool
+     */
+    public bool $deleteWhenMissingModels = true;
+
     public function __construct(
         public Energy $model,
         public float $amount,
