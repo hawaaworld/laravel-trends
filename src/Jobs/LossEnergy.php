@@ -13,16 +13,19 @@ class LossEnergy implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public function __construct(public Energy $model, public float $amount)
-    {
+    public function __construct(
+        public Energy $model,
+        public float $amount,
+        public array $sequence
+    ) {
     }
 
     public function handle(): void
     {
-        $this->model->amount -= $this->amount;
+        $this->model->amount -= array_shift($this->sequence) * $this->amount;
         $this->model->save();
 
-        if ($this->model->amount <= 0) {
+        if ($this->model->amount <= 0 || empty($this->sequence)) {
             if (config('trends.truncate')) {
                 $this->model->delete();
             }
@@ -30,7 +33,7 @@ class LossEnergy implements ShouldQueue
             return;
         }
 
-        self::dispatch($this->model, $this->amount)->delay(
+        self::dispatch($this->model, $this->amount, $this->sequence)->delay(
             now()->addMinutes(config('trends.loss_time'))
         );
     }
