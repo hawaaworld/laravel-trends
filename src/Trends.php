@@ -6,7 +6,6 @@ use Hawaaworld\Trends\Contracts\Energy as EnergyContract;
 use Hawaaworld\Trends\Models\Energy;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Model;
 
 class Trends
 {
@@ -20,14 +19,15 @@ class Trends
         return (float) $model->energy->amount;
     }
 
-    public function top(int $limit = 10, string $model = null): Collection
+    public function top(int $limit = 10, string $model = null, callable $builder = null): Collection
     {
         return Energy::query()
-            ->with('energiser')
+            ->with(['energiser' => $builder])
             ->when($model, fn (Builder $query) => $query->where('energiser_type', $model))
             ->latest('amount')
             ->take($limit)
             ->get()
-            ->pluck('energiser');
+            ->pluck('energiser')
+            ->filter();
     }
 }
