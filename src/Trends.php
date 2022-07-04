@@ -22,7 +22,7 @@ class Trends
     public function top(int $limit = 10, string $model = null, callable $builder = null): Collection
     {
         return Energy::query()
-            ->with(['energiser' => $builder])
+            ->with($builder ? ['energiser' => $builder] : 'energiser')
             ->when($model, fn (Builder $query) => $query->where('energiser_type', $model))
             ->latest('amount')
             ->limit($limit)
