@@ -32,12 +32,16 @@ class LossEnergy implements ShouldQueue
         $this->model->amount -= array_shift($this->sequence) * $this->amount;
         $this->model->save();
 
-        if ($this->model->amount <= 0 || empty($this->sequence)) {
+        if ($this->model->amount <= 0) {
             if (config('trends.truncate')) {
                 $this->model->delete();
             }
 
             return;
+        }
+
+        if (empty($this->sequence)) {
+            $this->sequence = config('trends.loss_sequence', [1]);
         }
 
         self::dispatch($this->model, $this->amount, $this->sequence)->delay(
