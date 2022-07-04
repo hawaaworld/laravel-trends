@@ -1,50 +1,36 @@
 <?php
 
-namespace Hacklabs\Trends\Traits;
+namespace Hawaaworld\Trends\Traits;
 
-use Illuminate\Http\Request;
-use Hacklabs\Trends\Jobs\EnergyDecay;
-use Hacklabs\Trends\Models\Energy;
-use Illuminate\Support\Facades\DB;
+use Hawaaworld\Trends\Jobs\AddEnergy;
+use Hawaaworld\Trends\Models\Energy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Throwable;
 
-trait HasEnergy 
+/* @mixin Model */
+trait HasEnergy
 {
-    public function addEnergy($amount = 1) {
-        if(!$this->energy) {
-            $this->createEnergy();
+    /**
+     * @throws Throwable
+     */
+    public function addEnergy(float $amount = 1.0): void
+    {
+        if (in_array(app('request')->ip(), config('trends.ip_blacklist', []), true)) {
+            return;
         }
-        $entity = $this->fresh();
-        if(!in_array(request()->ip(), config('trends.ip_blacklist'))) {
-            $this->energy()->update([
-                'amount' => $entity->energy->amount += $amount
-            ]);
-            EnergyDecay::dispatch($entity, 0.25)->delay(now()->addHours(config('trends.energy_decay')));
-            EnergyDecay::dispatch($entity, 0.45)->delay(now()->addHours(config('trends.energy_decay') * 2));
-            EnergyDecay::dispatch($entity, 0.30)->delay(now()->addHours(config('trends.energy_decay') * 3));
-        }
+
+        AddEnergy::dispatch($this, $amount);
     }
 
-    public function energy() {
-        return $this->morphOne(Energy::class, 'energisable');
+    public function energy(): MorphOne
+    {
+        return $this->morphOne(Energy::class, 'energiser');
     }
 
-    public function getEnergyAmountAttribute() {
-        return ($this->energy) ? (float) $this->energy->amount : 0;
-    }
-
-    public function decayEnergy($amount) {
-        $this->energy()->update([
-            'amount' => $this->energy->amount -= $amount
-        ]);
-    }
-
-    public function getEntityName() {
-        return str_slug(get_class($this).' '.$this->id);
-    }
-
-    public function createEnergy() {
-        return $this->energy()->create([
-            'amount' => 0
-        ]);
+    protected function energyAmount(): Attribute
+    {
+        return Attribute::get(fn () => $this->energy->amount);
     }
 }

@@ -1,33 +1,31 @@
 <?php
 
-namespace Hacklabs\Trends;
+namespace Hawaaworld\Trends;
 
 use Illuminate\Support\ServiceProvider;
-use Hacklabs\Trends\Trends;
 
-class TrendsServiceProvider extends ServiceProvider 
+class TrendsServiceProvider extends ServiceProvider
 {
-
-    public function register () {
-        $this->app->bind('trends', function() {
-            return new Trends();
-        });
+    public function register(): void
+    {
+        $this->app->bind('trends', fn () => new Trends());
     }
 
-    public function boot () {
-
+    public function boot(): void
+    {
         $this->registerMigrations();
 
         $this->publishes([
-            __DIR__.'/../migrations' => database_path('migrations')
+            __DIR__.'/../database/migrations' => database_path('migrations'),
         ], 'trends_migrations');
 
         $this->publishes([
-            __DIR__.'/../config/trends.php' => config_path('trends.php')
+            __DIR__.'/../config/trends.php' => config_path('trends.php'),
         ]);
     }
 
-    public function registerMigrations () {
-        return $this->loadMigrationsFrom(__DIR__.'/../migrations');
+    public function registerMigrations(): void
+    {
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 }
