@@ -27,6 +27,6 @@ trait HasEnergy
 
     protected function energyAmount(): Attribute
     {
-        return Attribute::get(fn() => $this->energy->amount);
+        return Attribute::get(fn () => $this->energy->amount);
     }
 }
