@@ -5,7 +5,7 @@ namespace Hawaaworld\Trends;
 use Hawaaworld\Trends\Contracts\Energy as EnergyContract;
 use Hawaaworld\Trends\Models\Energy;
 use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Trends
