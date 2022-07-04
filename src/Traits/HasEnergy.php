@@ -7,14 +7,10 @@ use Hawaaworld\Trends\Models\Energy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Throwable;
 
 /* @mixin Model */
 trait HasEnergy
 {
-    /**
-     * @throws Throwable
-     */
     public function addEnergy(float $amount = 1.0): void
     {
         if (in_array(app('request')->ip(), config('trends.ip_blacklist', []), true)) {
@@ -31,6 +27,6 @@ trait HasEnergy
 
     protected function energyAmount(): Attribute
     {
-        return Attribute::get(fn () => $this->energy->amount);
+        return Attribute::get(fn() => $this->energy->amount);
     }
 }
