@@ -66,13 +66,37 @@ $hashtag->energy->amount;
 
 ## Getting the top trends
 
-to get the top trends you can use the following method:
+to get the top trends from all types of models use the following method:
 
 ```php
-$trendingArticles = Trends::top(10, Article::class);
+$trending = Trends::top(10);
+
+/**
+ * returns a collection type of the top 10 trending models:
+ * Illuminate\Support\Collection {
+ *   #items: array:10 [
+ *     0 => App\Models\Article
+ *     1 => App\Models\Article
+ *     2 => App\Models\Video
+ *     3 => App\Models\Article
+ *     4 => App\Models\Hashtag
+ *     5 => App\Models\Hashtag
+ *     6 => App\Models\Article
+ *     7 => App\Models\Video
+ *     8 => App\Models\Comment
+ *     9 => App\Models\Comment
+ *   ]
+ * }
+ */
 ```
 
-The above code gets a top 10 trending articles, also you can set your own query builder to get the trending models you want:
+To customize the model you want to retrieve, let's say you want to get the top 10 trending videos, you can use the following method:
+
+```php
+$trendingArticles = Trends::top(10, Video::class);
+```
+
+You can set your own query builder to get the trending models you want:
     
 ```php
 $trendingArticles = Trends::top(10, Article::class, function($query) {
