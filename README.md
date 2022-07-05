@@ -73,6 +73,7 @@ $trending = Trends::top(10);
 
 /**
  * returns a collection type of the top 10 trending models:
+ * 
  * Illuminate\Support\Collection {
  *   #items: array:10 [
  *     0 => App\Models\Article
@@ -93,14 +94,14 @@ $trending = Trends::top(10);
 To customize the model you want to retrieve, let's say you want to get the top 10 trending videos, you can use the following method:
 
 ```php
-$trendingArticles = Trends::top(10, Video::class);
+$trendingVideos = Trends::top(10, Video::class);
 ```
 
 You can set your own query builder to get the trending models you want:
     
 ```php
-$trendingArticles = Trends::top(10, Article::class, function($query) {
-    $query->where('published', true);
+$trendingShortVideos = Trends::top(10, Video::class, function($query) {
+    $query->where('duration', '<', 60);
 });
 ```
 
