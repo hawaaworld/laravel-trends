@@ -1,9 +1,11 @@
 <p align="center"><img src="https://i.ibb.co/cccf74t/logo.png" alt="Laravel Trends"></p>
 
-
 <p align="center">
 <a href="https://packagist.org/packages/hawaaworld/laravel-trends"><img src="https://poser.pugx.org/hawaaworld/laravel-trends/d/total" alt="Total Downloads"></a> <a href="https://packagist.org/packages/hawaaworld/laravel-trends"><img src="https://poser.pugx.org/hawaaworld/laravel-trends/v/stable" alt="Latest Stable Version"></a> <a href="https://packagist.org/packages/hawaaworld/laravel-trends"><img src="https://poser.pugx.org/hawaaworld/laravel-trends/license" alt="License"></a>
 </p>
+
+> **Note**
+> This package is a fork of [hacklabsdev/laravel-trends](https://github.com/hacklabsdev/laravel-trends) and is not maintained by the original author.
 
 ## Introduction
 
@@ -37,11 +39,12 @@ To configure your losing time you can set the `loss_time` parameter in `config/t
 
 ## Preparing your model
 
-To allow your model to work with Trends you'll need to implement the HasEnergy trait. And in order to return the current model's energy value, add `energy_amount` to your serialization.
+To allow your model to work with Trends you'll need to implement the Energy interface with HasEnergy trait. And in order to return the current model's energy value, add `energy_amount` to your serialization.
 ```php
+use Hawaaworld\Trends\Contracts\Energy;
 use Hawaaworld\Trends\Traits\HasEnergy;
-    
-class Hashtag extends Model
+
+class Hashtag extends Model implements Energy
 {
     use HasEnergy;
     
@@ -63,11 +66,19 @@ $hashtag->energy->amount;
 
 ## Getting the top trends
 
+to get the top trends you can use the following method:
+
 ```php
-$trendingHashtags = trends()->top(10, Hashtag::class);
+$trendingArticles = Trends::top(10, Article::class);
 ```
 
-The above code gets a top 10 trending hashtags.
+The above code gets a top 10 trending articles, also you can set your own query builder to get the trending models you want:
+    
+```php
+$trendingArticles = Trends::top(10, Article::class, function($query) {
+    $query->where('published', true);
+});
+```
 
 ## License
 
