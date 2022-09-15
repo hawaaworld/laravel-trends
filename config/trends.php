@@ -47,4 +47,15 @@ return [
     |
     */
     'truncate' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dispatch Jobs To Queue
+    |--------------------------------------------------------------------------
+    |
+    | Defines if the jobs should be dispatched to queue. If set to true,
+    | the jobs will be dispatched to queue. If set to false, the jobs
+    | will be executed synchronously.
+    */
+    'queue' => true,
 ];

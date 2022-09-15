@@ -17,7 +17,11 @@ trait HasEnergy
             return;
         }
 
-        AddEnergy::dispatch($this, $amount);
+        if (config('trends.queue', true)) {
+            AddEnergy::dispatch($this, $amount);
+        } else {
+            AddEnergy::dispatchSync($this, $amount);
+        }
     }
 
     public function energy(): MorphOne
