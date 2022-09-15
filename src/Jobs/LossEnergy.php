@@ -11,14 +11,10 @@ use Illuminate\Queue\SerializesModels;
 
 class LossEnergy implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    /**
-     * Delete the job if its models no longer exist.
-     *
-     * @var bool
-     */
-    public bool $deleteWhenMissingModels = true;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public function __construct(
         public Energy $model,

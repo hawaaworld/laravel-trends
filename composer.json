@@ -25,5 +25,8 @@
   "require": {
 	"php": "^8.0",
 	"laravel/framework": "^9.0"
+  },
+  "require-dev": {
+    "laravel/pint": "dev-main"
   }
 }

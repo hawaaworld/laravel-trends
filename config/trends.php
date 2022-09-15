@@ -23,7 +23,6 @@ return [
     |
     */
     'ip_blacklist' => [
-        //
     ],
 
     /*
