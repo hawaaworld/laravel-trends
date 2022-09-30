@@ -16,8 +16,10 @@ class LossEnergy implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    public bool $deleteWhenMissingModels = true;
+
     public function __construct(
-        public $model,
+        public Energy $model,
         public float $amount,
         public array $sequence
     ) {
@@ -25,10 +27,6 @@ class LossEnergy implements ShouldQueue
 
     public function handle(): void
     {
-        if (is_null($this->model)) {
-            return;
-        }
-        
         $this->model->amount -= array_shift($this->sequence) * $this->amount;
         $this->model->save();
 
