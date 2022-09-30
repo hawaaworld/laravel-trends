@@ -17,7 +17,7 @@ class LossEnergy implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
-        public Energy $model,
+        public $model,
         public float $amount,
         public array $sequence
     ) {
@@ -25,6 +25,10 @@ class LossEnergy implements ShouldQueue
 
     public function handle(): void
     {
+        if (is_null($this->model)) {
+            return;
+        }
+        
         $this->model->amount -= array_shift($this->sequence) * $this->amount;
         $this->model->save();
 
